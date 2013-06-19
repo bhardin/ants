@@ -4,11 +4,11 @@
 <h4><%= @tournament.status %></h4>
 
 <% unless @tournament.finished? %>
-  <h4><%= @tournament.current_round %> / <%= @tournament.total_number_of_rounds %> Rounds</h4>
   <% if @tournament.can_add_players? %>
   	<%= link_to "Add Player", new_player_path(:tournament => @tournament), :class => "btn" %>
     <%= link_to "Start Tournament", tournament_start_path(@tournament), :class => "btn" %>
   <% elsif @tournament.all_matches_finished? %>
+    <h4><%= @tournament.current_round %> / <%= @tournament.total_number_of_rounds %> Rounds</h4>
     <%= link_to "Finalize Round", tournament_next_round_path(@tournament), :class => "btn" %>
   <% end %>
 <% end %>

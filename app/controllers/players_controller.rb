@@ -40,7 +40,6 @@ class PlayersController < ApplicationController
   # POST /players
   # POST /players.json
   def create
-
     @tournament = Tournament.find(params[:player][:tournaments])
     # @player = Player.new(params[:player])
 
