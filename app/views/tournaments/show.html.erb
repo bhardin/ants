@@ -1,0 +1,82 @@
+<p id="notice"><%= notice %></p>
+
+<h1><%= @tournament.name %></h1>
+<h4><%= @tournament.status %></h4>
+
+<% unless @tournament.finished? %>
+  <h4><%= @tournament.current_round %> / <%= @tournament.total_number_of_rounds %> Rounds</h4>
+  <% if @tournament.can_add_players? %>
+  	<%= link_to "Add Player", new_player_path(:tournament => @tournament), :class => "btn" %>
+    <%= link_to "Start Tournament", tournament_start_path(@tournament), :class => "btn" %>
+  <% elsif @tournament.all_matches_finished? %>
+    <%= link_to "Finalize Round", tournament_next_round_path(@tournament), :class => "btn" %>
+  <% end %>
+<% end %>
+
+<h2>Matches</h2>
+<table class="table">
+	<thead>
+    <th>Match ID</th>
+		<th>Player 1</th>
+		<th>Player 2</th>
+		<th>Game 1</th>
+		<th>Game 2</th>
+		<th>Status</th>
+	</thead>
+  <% for match in @matches %>
+  <tr>
+    <td><%= match.round %></td>
+    	<% for player in match.players %>
+      	<td><%= player.name %></td>
+    	<% end %>
+      
+      <td>
+        <% unless match.status == "finished" %>
+          <%= form_for(match, :remote => true) do |f| %>
+            <%= f.text_field :game_1_score %>
+          <% end %>
+        <% else %>
+          <%= match.game_1_score %>
+        <% end %>
+      </td>
+
+      <td>
+      <% unless match.status == "finished" %>
+        <%= form_for(match, :remote => true) do |f| %>
+          <%= f.text_field :game_2_score %>     
+        <% end %>
+      <% else %>
+        <%= match.game_2_score %>
+      <% end %>
+      </td>
+
+      <td>
+      <% unless match.status == "finished" %>
+        <%= link_to "Finalize", tournament_score_match_path(@tournament, :match => match), :class => "btn" %>
+      <% else %>
+        <%= link_to "Oops", tournament_score_match_path(@tournament, :match => match), :class => "btn" %>
+      <% end %>
+      </td>
+	</tr>
+  <% end %>
+</table>
+
+<table class="table">
+  <thead>
+    <th>Name</th>
+    <th>Prestige</th>
+    <th>Match Points</th>
+  </thead>
+  <% for player in @players %>
+    <tr>
+      <td><%= player.name %></td>
+      <td><%= player.prestige %></td>
+      <td><%= player.match_points %></td>
+    </tr>
+  <% end %>
+</table>
+
+<br/>
+
+<%= link_to 'Edit', edit_tournament_path(@tournament) %> |
+<%= link_to 'Back', tournaments_path %>

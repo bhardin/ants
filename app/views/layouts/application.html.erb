@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Ants</title>
+  <%= javascript_include_tag "application" %>
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= csrf_meta_tags %>
+</head>
+
+<body>
+	<div class="container">
+		<%= yield %>
+	</div>
+</body>
+
+</html>
