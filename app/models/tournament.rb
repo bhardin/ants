@@ -23,7 +23,7 @@ class Tournament < ActiveRecord::Base
   end
 
   def can_add_players?
-  	return false if status == "Running"
+  	return false if self.running?
   	return true
   end
 
@@ -134,6 +134,10 @@ class Tournament < ActiveRecord::Base
 
   def finished?
     return status == "Finished"
+  end
+
+  def running?
+    return status == "Running"
   end
 
   private

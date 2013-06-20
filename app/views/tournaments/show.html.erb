@@ -13,6 +13,7 @@
   <% end %>
 <% end %>
 
+<% if @tournament.running? %>
 <h2>Matches</h2>
 <table class="table">
 	<thead>
@@ -30,7 +31,7 @@
       	<td><%= player.name %></td>
     	<% end %>
       
-      <td>
+      <td class="match1">
         <% unless match.status == "finished" %>
           <%= form_for(match, :remote => true) do |f| %>
             <%= f.text_field :game_1_score %>
@@ -40,7 +41,7 @@
         <% end %>
       </td>
 
-      <td>
+      <td class="match2">
       <% unless match.status == "finished" %>
         <%= form_for(match, :remote => true) do |f| %>
           <%= f.text_field :game_2_score %>     
@@ -60,6 +61,7 @@
 	</tr>
   <% end %>
 </table>
+<% end %>
 
 <table class="table">
   <thead>
