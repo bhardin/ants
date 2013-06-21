@@ -51,7 +51,7 @@ class Match < ActiveRecord::Base
     (player_1_game_2_score != 10 && player_2_game_2_score != 10)
   end
 
-  def completed?
+  def finished_in_time?
     (player_1_game_1_score == 10 || player_2_game_1_score == 10) && 
     (player_1_game_2_score == 10 || player_2_game_2_score == 10)
   end
@@ -70,11 +70,16 @@ class Match < ActiveRecord::Base
     end
 
     # Count Game 2
-    if player_1_game_2_score > player_2_game_2_score
-      prestige[0] += 2
-    elsif player_1_game_2_score < player_2_game_2_score
-      prestige[1] += 2
-    elsif player_1_game_2_score == player_2_game_2_score
+    if finished_in_time?
+      if player_1_game_2_score > player_2_game_2_score
+        prestige[0] += 2
+      elsif player_1_game_2_score < player_2_game_2_score
+        prestige[1] += 2
+      elsif player_1_game_2_score == player_2_game_2_score
+        prestige[0] += 1
+        prestige[1] += 1
+      end
+    else
       prestige[0] += 1
       prestige[1] += 1
     end

@@ -142,6 +142,38 @@ describe Match do
         end
       end
     end
+
+    context "when first game was 10, 3 and second game was 1, 4 (not completed)" do
+      before :each do
+        @match = Match.new
+        @match.players << @player1
+        @match.players << @player2
+        @match.player_1_game_1_score = 10
+        @match.player_2_game_1_score = 3
+        @match.player_1_game_2_score = 1
+        @match.player_2_game_2_score = 4
+      end
+
+      describe "first player" do
+        it "has 5 prestige points" do
+          @match.player_prestige(1).should == 5  
+        end
+
+        it "has 11 match points" do
+          @match.player_1_match_points.should == 11
+        end
+      end
+
+      describe "second player" do
+        it "has 1 prestige points" do
+          @match.player_prestige(2).should == 1
+        end
+
+        it "has 7 prestige points" do
+          @match.player_2_match_points.should == 7
+        end
+      end
+    end
   end
 
   describe "validation" do
