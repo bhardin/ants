@@ -1,17 +1,28 @@
 <p id="notice"><%= notice %></p>
 
 <h1><%= @tournament.name %></h1>
+<h4><%= @tournament.players.count %> Players</h4>
 <h4><%= @tournament.status %></h4>
 
 <% unless @tournament.finished? %>
   <% if @tournament.can_add_players? %>
-  	<%= link_to "Add Player", new_player_path(:tournament => @tournament), :class => "btn" %>
+  	
+    <!-- <%= link_to "Add Player", new_player_path(:tournament => @tournament), :class => "btn" %> -->
+    
+     <button class="btn" id="add_player">Add Player</button>
+
     <%= link_to "Start Tournament", tournament_start_path(@tournament), :class => "btn" %>
   <% elsif @tournament.all_matches_finished? %>
     <h4><%= @tournament.current_round %> / <%= @tournament.total_number_of_rounds %> Rounds</h4>
     <%= link_to "Finalize Round", tournament_next_round_path(@tournament), :class => "btn" %>
   <% end %>
 <% end %>
+
+
+<div id="add_player_form" style="display: none">
+  <% @player = Player.new %>
+  <%= render 'players/form' %>
+</div>
 
 <% if @tournament.running? %>
 <h2>Matches</h2>
@@ -28,36 +39,43 @@
   <tr>
     <td><%= match.round %></td>
     	<% for player in match.players %>
-      	<td><%= player.name %></td>
+      	<td class-"player"><%= player.name %></td>
     	<% end %>
       
-      <td class="match1">
-        <% unless match.status == "finished" %>
+      <% unless match.status == "finished" %>
+        <td class="match">
           <%= form_for(match, :remote => true) do |f| %>
-            <%= f.text_field :game_1_score %>
+            <%= f.text_field :game_1_score, :class => "score" %>
           <% end %>
-        <% else %>
+        </td>
+      <% else %>
+        <td class="match submitted">
           <%= match.game_1_score %>
+        </td>
         <% end %>
-      </td>
-
-      <td class="match2">
+      
       <% unless match.status == "finished" %>
-        <%= form_for(match, :remote => true) do |f| %>
-          <%= f.text_field :game_2_score %>     
-        <% end %>
+        <td class="match" id="match2">
+          <%= form_for(match, :remote => true) do |f| %>
+            <%= f.text_field :game_2_score, :class => "score" %>     
+          <% end %>
+        </td>
       <% else %>
-        <%= match.game_2_score %>
+        <td class="match submitted" id="match2">
+          <%= match.game_2_score %>
+        </td>
       <% end %>
-      </td>
-
+      
       <td>
-      <% unless match.status == "finished" %>
-        <%= link_to "Finalize", tournament_score_match_path(@tournament, :match => match), :class => "btn" %>
-      <% else %>
+      <% if !match.finished? %>
+        <%= link_to "Finalize", tournament_score_match_path(@tournament, :match => match), :remote => true, :class => "btn finalize" %>
+      <% elsif match.round == @tournament.current_round %>
         <%= link_to "Oops", tournament_score_match_path(@tournament, :match => match), :class => "btn" %>
+      <% else %>
+        <%= "Went To Time" if match.went_to_time? %>
       <% end %>
       </td>
+
 	</tr>
   <% end %>
 </table>

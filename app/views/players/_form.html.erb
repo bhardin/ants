@@ -17,6 +17,8 @@
   </div>
 
   <%= f.hidden_field :tournaments, :value => params[:tournament] if params[:tournament] %>
+  <%= f.hidden_field :tournaments, :value => @tournament.id if @tournament %>
+
 
   <div class="actions">
     <%= f.submit %>

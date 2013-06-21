@@ -8,6 +8,10 @@ class Match < ActiveRecord::Base
   attr_accessible :status, :round
   attr_accessible :game_1_score, :game_2_score
 
+  def finished?
+    self.status == 'finished'
+  end
+
   def update_score(match, params)
     if params["game_1_score"]
       puts "here"
@@ -27,19 +31,11 @@ class Match < ActiveRecord::Base
   end
 
   def game_1_score
-    # unless status == "finished"
-      # "0 - 0"
-    # else
-     "#{player_1_game_1_score} - #{player_2_game_1_score}"
-    # end
+    "#{player_1_game_1_score} - #{player_2_game_1_score}"
   end
 
   def game_2_score
-    # unless status == "finished"
-      # "0 - 0"
-    # else
-      "#{player_1_game_2_score} - #{player_2_game_2_score}"
-    # end
+    "#{player_1_game_2_score} - #{player_2_game_2_score}"
   end
 
   def player_1_match_points
@@ -48,6 +44,16 @@ class Match < ActiveRecord::Base
 
   def player_2_match_points
     player_2_game_1_score + player_2_game_2_score
+  end
+
+  def went_to_time?
+    (player_1_game_1_score != 10 && player_2_game_1_score != 10) || 
+    (player_1_game_2_score != 10 && player_2_game_2_score != 10)
+  end
+
+  def completed?
+    (player_1_game_1_score == 10 || player_2_game_1_score == 10) && 
+    (player_1_game_2_score == 10 || player_2_game_2_score == 10)
   end
 
   def player_prestige(player)

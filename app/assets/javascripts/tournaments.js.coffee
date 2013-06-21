@@ -12,11 +12,28 @@ square = (x) -> x * x
 cube = (x) -> square(x) * x
 
 $(document).ready ->
-	$('input').on "blur", -> $(this)
-		.parents("form")
+	$('input').on 'blur', -> $(this)
+		#.hide()
+		.parents('form')
 		.submit()
-		.parents("td")
-		.addClass("submitted")
+		.parents('tr')
+		.find('.finalize')
+		.submit()
+
+	$('.finalize').on 'click', -> 
+		if $(this).text() == 'Finalize'
+			$(this)
+			  .text("Submitted")
+				.parents("tr")
+				.find('.match').toggleClass('submitted')
+		else
+			$(this)
+				.text("Finalize")
+				.parents("tr")
+				.find('.match').toggleClass('submitted')
 		
+$(document).ready ->
+	$('#add_player').on 'click', -> $('#add_player_form').toggle()
 		
-		
+
+
