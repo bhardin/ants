@@ -14,6 +14,88 @@ describe Match do
     FactoryGirl.build(:match).should be_valid
   end
 
+  describe ".player_prestige(player)" do
+    context "when first player won both games" do
+      before :each do
+        @match = Match.new
+        @match.players << @player1
+        @match.players << @player2
+        @match.player_1_game_1_score = 10
+        @match.player_2_game_1_score = 0
+        @match.player_1_game_2_score = 10
+        @match.player_2_game_2_score = 0
+      end
+
+      it "first player has 6 points" do
+        @match.player_prestige(1).should == 6
+      end
+
+      it "second player has 0 points" do
+        @match.player_prestige(2).should == 0
+      end
+    end
+
+    context "when second player won both games" do
+      before :each do
+        @match = Match.new
+        @match.players << @player1
+        @match.players << @player2
+        @match.player_1_game_1_score = 2
+        @match.player_2_game_1_score = 10
+        @match.player_1_game_2_score = 2
+        @match.player_2_game_2_score = 10
+      end
+
+      it "first player has 0 points" do
+        @match.player_prestige(1).should == 0
+      end
+
+      it "second player has 6 points" do
+        @match.player_prestige(2).should == 6
+      end
+    end
+
+    context "when first player scored 10,4 and second player scored 2,10" do
+      before :each do
+        @match = Match.new
+        @match.players << @player1
+        @match.players << @player2
+        @match.player_1_game_1_score = 10
+        @match.player_2_game_1_score = 2
+        @match.player_1_game_2_score = 4
+        @match.player_2_game_2_score = 10
+      end
+
+      it "first player has 4 points" do
+        @match.player_prestige(1).should == 4
+      end
+
+      it "second player has 2 points" do
+        @match.player_prestige(2).should == 2
+      end
+    end
+
+    context "when first player and second player have equal scores" do
+      before :each do
+        @match = Match.new
+        @match.players << @player1
+        @match.players << @player2
+        @match.player_1_game_1_score = 2
+        @match.player_2_game_1_score = 10
+        @match.player_1_game_2_score = 10
+        @match.player_2_game_2_score = 2
+      end
+
+      it "first player has 3 points" do
+        @match.player_prestige(1).should == 3
+      end
+
+      it "second player has 3 points" do
+        @match.player_prestige(2).should == 3
+      end
+    end
+  end
+
   describe "validation" do
     before :each do
       @match = Match.new
