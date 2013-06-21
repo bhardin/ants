@@ -26,12 +26,24 @@ describe Match do
         @match.player_2_game_2_score = 0
       end
 
-      it "first player has 6 points" do
-        @match.player_prestige(1).should == 6
+      describe "first player" do
+        it "has 6 prestige points" do
+          @match.player_prestige(1).should == 6  
+        end
+
+        it "has 20 match points" do
+          @match.player_1_match_points.should == 20
+        end
       end
 
-      it "second player has 0 points" do
-        @match.player_prestige(2).should == 0
+      describe "second player" do
+        it "has 0 prestige points" do
+          @match.player_prestige(2).should == 0
+        end
+
+        it "has 0 prestige points" do
+          @match.player_2_match_points.should == 0
+        end
       end
     end
 
@@ -46,12 +58,24 @@ describe Match do
         @match.player_2_game_2_score = 10
       end
 
-      it "first player has 0 points" do
-        @match.player_prestige(1).should == 0
+      describe "first player" do
+        it "has 0 prestige points" do
+          @match.player_prestige(1).should == 0  
+        end
+
+        it "has 4 match points" do
+          @match.player_1_match_points.should == 4
+        end
       end
 
-      it "second player has 6 points" do
-        @match.player_prestige(2).should == 6
+      describe "second player" do
+        it "has 6 prestige points" do
+          @match.player_prestige(2).should == 6
+        end
+
+        it "has 12 prestige points" do
+          @match.player_2_match_points.should == 20
+        end
       end
     end
 
@@ -66,12 +90,24 @@ describe Match do
         @match.player_2_game_2_score = 10
       end
 
-      it "first player has 4 points" do
-        @match.player_prestige(1).should == 4
+      describe "first player" do
+        it "has 4 prestige points" do
+          @match.player_prestige(1).should == 4
+        end
+
+        it "has 14 match points" do
+          @match.player_1_match_points.should == 14
+        end
       end
 
-      it "second player has 2 points" do
-        @match.player_prestige(2).should == 2
+      describe "second player" do
+        it "has 2 prestige points" do
+          @match.player_prestige(2).should == 2
+        end
+
+        it "has 12 prestige points" do
+          @match.player_2_match_points.should == 12
+        end
       end
     end
 
@@ -86,12 +122,24 @@ describe Match do
         @match.player_2_game_2_score = 2
       end
 
-      it "first player has 3 points" do
-        @match.player_prestige(1).should == 3
+      describe "first player" do
+        it "has 3 prestige points" do
+          @match.player_prestige(1).should == 3  
+        end
+
+        it "has 12 match points" do
+          @match.player_1_match_points.should == 12
+        end
       end
 
-      it "second player has 3 points" do
-        @match.player_prestige(2).should == 3
+      describe "second player" do
+        it "has 3 prestige points" do
+          @match.player_prestige(2).should == 3
+        end
+
+        it "has 12 prestige points" do
+          @match.player_2_match_points.should == 12
+        end
       end
     end
   end
