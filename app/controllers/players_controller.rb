@@ -2,11 +2,19 @@ class PlayersController < ApplicationController
   # GET /players
   # GET /players.json
   def index
-    @players = Player.all
+    if params[:term]
+      like  = "%".concat(params[:term].concat("%"))
+      @players = Player.where("name like ?", like)
+    else
+      @players = Player.all
+    end
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @players }
+      format.json { 
+        list = @players.map { |p| Hash[ id: p.id, label: p.name, name: p.name ]} 
+        render json: list 
+      }
     end
   end
 

@@ -12,7 +12,7 @@ square = (x) -> x * x
 cube = (x) -> square(x) * x
 
 $(document).ready ->
-	$('input').on 'blur', -> $(this)
+	$('.score').on 'blur', -> $(this)
 		#.hide()
 		.parents('form')
 		.submit()
