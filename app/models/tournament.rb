@@ -63,33 +63,35 @@ class Tournament < ActiveRecord::Base
   end
 
   def match_players(players)
+    temp_players = Array.new(players)
     i = 0
     
     while i < players.count
-      player1 = players[i]
-      player2 = players[i + 1]
-      match = Match.new
-      match.players << player1
-      match.players << player2
-      match.round = self.round
-      match.tournament = self
-      match.save
-
+      player1 = players.at(i)
+      player2 = players.at(i+1)
+      create_match(player1, player2, self.round, self)
       i += 2
     end
   end
 
+  def create_match(player1, player2, round, tournament)
+    match = Match.new
+    match.players << player1
+    match.players << player2
+    match.round = round
+    match.tournament = tournament
+    match.save
+  end
+
+  # This should be used for single-elimination after
+  # the swiss matches have been played.
   def match_players_first_to_last(players)
     count = (players.count/2)
 
     count.times do | i |
       player1 = players[i]
       player2 = players[players.count - 1 - i]
-      match = Match.new
-      match.players << player1
-      match.players << player2
-      match.tournament = self
-      match.save
+      create_match(player1, player2, self.round, self)
     end
   end
 
