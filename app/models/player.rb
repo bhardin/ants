@@ -1,15 +1,31 @@
 class Player < ActiveRecord::Base
   attr_accessible :name
+  validates :name, :presence => true, :uniqueness => true
 
   has_many :tournaments
   has_many :tournament_players
   has_many :tournaments, :through => :tournament_players
-
   has_and_belongs_to_many :matches
-  # has_many :player_matches
-  # has_many :matches, :through => :player_matches
-    
-  validates :name, :presence => true, :uniqueness => true
+
+  def has_played?(player)
+    matches.each do | match |
+      if match.player_1.name == self.name 
+        if match.player_2.name == player.name
+          return true
+        end
+      else
+        if match.player_1.name == player.name
+          return true
+        end
+      end
+    end
+
+    return false
+  end
+
+  def has_not_played?(player)
+    !has_played?(player)
+  end
 end
 
 

@@ -30,6 +30,14 @@ class Match < ActiveRecord::Base
     end
   end
 
+  def player_1
+    players.first
+  end
+
+  def player_2
+    players.second
+  end
+
   def game_1_score
     "#{player_1_game_1_score} - #{player_2_game_1_score}"
   end

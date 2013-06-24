@@ -63,10 +63,18 @@ class Tournament < ActiveRecord::Base
   end
 
   def match_players(players)
-    temp_players = Array.new(players)
+    temp_players = Array.new(players).reverse
     i = 0
+    temp_array = []
     
     while i < players.count
+      player_1 = temp_players.pop
+      player_2 = temp_players.pop
+      until player_1.has_not_played?(player_2)
+        temp_array << player_2
+        player_2 = temp_players.pop
+      end
+      temp_players += temp_array.reverse
       player1 = players.at(i)
       player2 = players.at(i+1)
       create_match(player1, player2, self.round, self)
