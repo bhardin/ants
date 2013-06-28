@@ -113,8 +113,8 @@ class Tournament < ActiveRecord::Base
   # 17 - 32     5                      3, Cut to Top-4
   # 33+         6                      4, Cut to Top-8
   def total_number_of_rounds
-    case self.players.count
-    when 2..3
+    case player_count
+    when 2..4
       2
     when 5..8
       3
@@ -151,6 +151,10 @@ class Tournament < ActiveRecord::Base
   end
 
   private
+  def player_count
+    self.players.count
+  end
+
   def calculate_each_players_prestige
     @players = self.players
 
