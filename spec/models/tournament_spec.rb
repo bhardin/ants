@@ -2,20 +2,21 @@ require 'spec_helper'
 
 describe Tournament do
 	let(:tournament) { FactoryGirl.create :tournament }
+  let(:tournament_with_players) { FactoryGirl.create :tournament_with_players }
 
 	it { tournament.should respond_to(:matches) }
 	it { tournament.should respond_to(:players) } 	
 
 	describe "#start_tournament" do
-		it "changes status to Running" do
-			# lambda { tournament.start_tournament }.should change(:status).to("Running")
+    it "changes status to Running" do
+      tournament.start_tournament  
+      tournament.status.should == :running
 		end
 
 		it "seeds the first round" do
-			# lambda { tournament.start_tournament }.should call(:seed_round)
+			tournament.should_receive :seed_first_round
+      tournament.start_tournament
 		end
-
-		it "saves itself"
 	end
 
 	describe "#current_round" do
@@ -26,9 +27,10 @@ describe Tournament do
 	end
 
 	describe "#end_tournament" do
-		it "sets the status as Finished"
-
-		it "saves itself"
+		it "sets the status as finished" do
+      tournament.end_tournament 
+      tournament.status.should == :finished
+    end
 	end
 
 	describe "#can_add_players?" do
@@ -42,51 +44,68 @@ describe Tournament do
 
 	describe "#next_round" do
 		context "when it's the last_round" do
-			it "calls end_tournament"			
+			it "calls end_tournament" do
+        tournament.stub(:total_number_of_rounds).and_return(3)
+        tournament.stub(:round).and_return(3)
+        tournament.should_receive :end_tournament
+        tournament.next_round
+      end
 		end
 
 		context "when it isn't the last round" do
+      before :each do
+        tournament.start_tournament
+      end
+
 			it "incraments the round by 1" do
-				tournament.stub(:round).and_return(1)
-				# lambda { tournament.next_round }.should change(:round, :to).by(2)
+        expect { tournament.next_round }.to change { tournament.round }.by(1)
 			end
 
-			it "calculates each players prestige"
+			it "calculates each players prestige" do
+        tournament.should_receive :calculate_each_players_prestige
+        tournament.next_round
+      end
 
-			it "matches up players"
+			it "matches up players" do
+        tournament.should_receive :match_players
+        tournament.next_round
+      end
 		end
 	end
 
 	describe "#all_matches_finished?" do
 		it "returns true when all matches are finished" do
 			match = Match.new
-			match.status = "finished"
+			match.stub(:status).and_return(:finished)
 			tournament.matches << match
 			tournament.all_matches_finished?.should be_true
 		end
 
 		it "returns false when matches don't have a status of finished" do
 			match = Match.new
-			match.status = "running"
+			match.stub(:status).and_return(:running)
 			tournament.matches << match
 			tournament.all_matches_finished?.should be_false
 		end
 	end
 
   describe "#seed_first_round" do
-  	it "sets round to 1"
+  	it "sets round to 1" do
+      expect { tournament.seed_first_round }.to change{ tournament.round }.to(1)
+    end
 
-  	it "shuffles the players"
-
-  	it "calls match_players"
+  	it "calls match_players" do
+      tournament.start_tournament
+      tournament.should_receive :match_players
+      tournament.next_round
+    end
 
   	context "when the number of players is odd" do
   		it "adds a BYE player"
   	end
 
   	context "when the number of players is even" do
-  		it "doesn't add a BYE player" do
-  		end
+  		it "doesn't add a BYE player"
   	end
   end
 
@@ -162,14 +181,14 @@ describe Tournament do
   describe "#finished?" do
   	context "when match is Finished" do
   		it "returns true" do
-  			tournament.stub(:status).and_return("Finished")
+  			tournament.stub(:status).and_return(:finished)
   			tournament.finished?.should be_true
   		end
   	end
 
-  	context "when match is Running" do
+  	context "when match is running" do
   		it "returns false" do
-  			tournament.stub(:status).and_return("Running")
+  			tournament.stub(:status).and_return(:running)
   			tournament.finished?.should be_false
 	  	end
   	end
@@ -178,14 +197,14 @@ describe Tournament do
   describe "#running?" do
   	context "when match is Finished" do
   		it "returns false" do
-  			tournament.stub(:status).and_return("Finished")
+  			tournament.stub(:status).and_return(:finished)
   			tournament.running?.should be_false
   		end
   	end
 
   	context "when match is Running" do
   		it "returns true" do
-  			tournament.stub(:status).and_return("Running")
+  			tournament.stub(:status).and_return(:running)
   			tournament.running?.should be_true
 	  	end
   	end

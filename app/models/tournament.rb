@@ -7,10 +7,13 @@ class Tournament < ActiveRecord::Base
   has_many :tournament_players
   has_many :players, :through => :tournament_players
 
+  # def initalize
+  #   self.status = "Adding Players"
+  # end
+
   def start_tournament
-  	self.status = "Running"
+  	self.status = :running
     seed_first_round
-  	self.save
   end
 
   def current_round
@@ -18,8 +21,7 @@ class Tournament < ActiveRecord::Base
   end
 
   def end_tournament
-  	self.status = "Finished"
-  	self.save
+  	self.status = :finished
   end
 
   def can_add_players?
@@ -40,7 +42,7 @@ class Tournament < ActiveRecord::Base
 
   def all_matches_finished?
     self.matches.each do | m |
-      if m.status != "finished"
+      if m.status != :finished
         return false
       end
     end
@@ -107,7 +109,7 @@ class Tournament < ActiveRecord::Base
   # Players     Full # of Rounds       Min # of Rounds of Play
   #             if not cutting to      Before cutting to 
   #             Single-Elimination     Single-Elimination
-  # 2 - 3       2                      N/A
+  # 2 - 4       2                      N/A
   # 5 - 8       3                      N/A
   # 9 - 16      4                      N/A
   # 17 - 32     5                      3, Cut to Top-4
@@ -143,11 +145,11 @@ class Tournament < ActiveRecord::Base
   end
 
   def finished?
-    return status == "Finished"
+    return status == :finished
   end
 
   def running?
-    return status == "Running"
+    return status == :running
   end
 
   private
