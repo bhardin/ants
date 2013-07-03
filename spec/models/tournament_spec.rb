@@ -75,16 +75,16 @@ describe Tournament do
 
 	describe "#all_matches_finished?" do
 		it "returns true when all matches are finished" do
-			match = Match.new
-			match.stub(:status).and_return(:finished)
-			tournament.matches << match
+      tournament.matches.each do | match |
+        match.stub(:status).and_return(:finished)  
+      end
 			tournament.all_matches_finished?.should be_true
 		end
 
 		it "returns false when matches don't have a status of finished" do
-			match = Match.new
-			match.stub(:status).and_return(:running)
-			tournament.matches << match
+			tournament.matches.each do | match |
+        match.stub(:status).and_return(:running)  
+      end
 			tournament.all_matches_finished?.should be_false
 		end
 	end
