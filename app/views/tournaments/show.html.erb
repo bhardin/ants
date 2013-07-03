@@ -6,7 +6,6 @@
 
 <% unless @tournament.finished? %>
   <% if @tournament.can_add_players? %>
-  	
     <!-- <%= link_to "Add Player", new_player_path(:tournament => @tournament), :class => "btn" %> -->
     
      <button class="btn" id="add_player">Add Player</button>

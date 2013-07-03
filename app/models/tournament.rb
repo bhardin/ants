@@ -12,7 +12,9 @@ class Tournament < ActiveRecord::Base
   # end
 
   def start_tournament
-  	self.status = :running
+    raise Error if running?
+
+  	self.status = "running"
     seed_first_round
   end
 
@@ -21,11 +23,11 @@ class Tournament < ActiveRecord::Base
   end
 
   def end_tournament
-  	self.status = :finished
+  	self.status = "finished"
   end
 
   def can_add_players?
-  	return false if self.running?
+  	return false if running?
   	return true
   end
 
@@ -42,11 +44,14 @@ class Tournament < ActiveRecord::Base
 
   def all_matches_finished?
     self.matches.each do | m |
+      puts m.status
       if m.status != :finished
+        puts false
         return false
       end
     end
 
+    puts true
     return true
   end
 
@@ -145,11 +150,11 @@ class Tournament < ActiveRecord::Base
   end
 
   def finished?
-    return status == :finished
+    status == "finished"
   end
 
   def running?
-    return status == :running
+    status == "running"
   end
 
   private

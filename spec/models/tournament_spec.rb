@@ -10,13 +10,20 @@ describe Tournament do
 	describe "#start_tournament" do
     it "changes status to Running" do
       tournament.start_tournament  
-      tournament.status.should == :running
+      tournament.status.should == "running"
 		end
 
 		it "seeds the first round" do
 			tournament.should_receive :seed_first_round
       tournament.start_tournament
 		end
+
+    context "when tournament is already running" do
+      it "throws an error" do
+        tournament.stub(:status).and_return("running")
+        expect { tournament.start_tournament }.to raise_error
+      end
+    end
 	end
 
 	describe "#current_round" do
@@ -29,7 +36,7 @@ describe Tournament do
 	describe "#end_tournament" do
 		it "sets the status as finished" do
       tournament.end_tournament 
-      tournament.status.should == :finished
+      tournament.status.should == "finished"
     end
 	end
 
@@ -181,14 +188,14 @@ describe Tournament do
   describe "#finished?" do
   	context "when match is Finished" do
   		it "returns true" do
-  			tournament.stub(:status).and_return(:finished)
+  			tournament.stub(:status).and_return("finished")
   			tournament.finished?.should be_true
   		end
   	end
 
   	context "when match is running" do
   		it "returns false" do
-  			tournament.stub(:status).and_return(:running)
+  			tournament.stub(:status).and_return("running")
   			tournament.finished?.should be_false
 	  	end
   	end
@@ -197,14 +204,14 @@ describe Tournament do
   describe "#running?" do
   	context "when match is Finished" do
   		it "returns false" do
-  			tournament.stub(:status).and_return(:finished)
+  			tournament.stub(:status).and_return("finished")
   			tournament.running?.should be_false
   		end
   	end
 
   	context "when match is Running" do
   		it "returns true" do
-  			tournament.stub(:status).and_return(:running)
+  			tournament.stub(:status).and_return("running")
   			tournament.running?.should be_true
 	  	end
   	end
