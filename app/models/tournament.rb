@@ -7,15 +7,16 @@ class Tournament < ActiveRecord::Base
   has_many :tournament_players
   has_many :players, :through => :tournament_players
 
-  # def initalize
-  #   self.status = "Adding Players"
-  # end
+  def initalize
+    self.status = "Adding Players"
+  end
 
   def start_tournament
-    raise Error if running?
+    raise if self.running?
 
   	self.status = "running"
     seed_first_round
+    self.save
   end
 
   def current_round
@@ -27,7 +28,7 @@ class Tournament < ActiveRecord::Base
   end
 
   def can_add_players?
-  	return false if running?
+  	return false if self.running?
   	return true
   end
 

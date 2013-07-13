@@ -5,6 +5,8 @@
 <h4><%= @tournament.status %></h4>
 
 <% unless @tournament.finished? %>
+  
+
   <% if @tournament.can_add_players? %>
     <!-- <%= link_to "Add Player", new_player_path(:tournament => @tournament), :class => "btn" %> -->
     

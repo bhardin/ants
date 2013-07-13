@@ -5,6 +5,7 @@ gem 'sqlite3'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'bootstrap-sass'
+gem 'spork'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'

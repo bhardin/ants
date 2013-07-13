@@ -8,6 +8,8 @@ class Player < ActiveRecord::Base
   has_and_belongs_to_many :matches
 
   def has_played?(player)
+    return false if matches.nil?
+
     matches.each do | match |
       if match.player_1.name == self.name 
         if match.player_2.name == player.name
