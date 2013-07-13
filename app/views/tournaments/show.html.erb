@@ -1,8 +1,9 @@
 <p id="notice"><%= notice %></p>
 
 <h1><%= @tournament.name %></h1>
-<h4><%= @tournament.players.count %> Players</h4>
+<h4><%= @tournament.players.count %> Players (<%= @tournament.total_number_of_rounds %> Rounds)</h4>
 <h4><%= @tournament.status %></h4>
+
 
 <% unless @tournament.finished? %>
   <% if @tournament.can_add_players? %>

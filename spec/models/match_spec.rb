@@ -16,12 +16,12 @@ describe Match do
 
   describe "#finished?" do
     it "returns true if status is finished" do
-      match.stub(:status).and_return(:finished)
+      match.stub(:status).and_return("finished")
       match.finished?.should be_true
     end
 
     it "returns false if status is running" do
-      match.stub(:status).and_return(:running)
+      match.stub(:status).and_return("running")
       match.finished?.should be_false
     end
   end
