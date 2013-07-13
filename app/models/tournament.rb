@@ -45,14 +45,11 @@ class Tournament < ActiveRecord::Base
 
   def all_matches_finished?
     self.matches.each do | m |
-      puts m.status
       if m.status != "finished"
-        puts false
         return false
       end
     end
 
-    puts true
     return true
   end
 
@@ -185,8 +182,6 @@ class Tournament < ActiveRecord::Base
       tp.prestige += prestige
       tp.match_points += match_points
       tp.save
-
-      puts "#{p.name} #{tp.prestige}: #{player_one.name} vs. #{player_two.name}"   
     end
   end
 end
