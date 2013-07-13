@@ -46,7 +46,7 @@ class Tournament < ActiveRecord::Base
   def all_matches_finished?
     self.matches.each do | m |
       puts m.status
-      if m.status != :finished
+      if m.status != "finished"
         puts false
         return false
       end

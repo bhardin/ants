@@ -5,13 +5,8 @@
 <h4><%= @tournament.status %></h4>
 
 <% unless @tournament.finished? %>
-  
-
   <% if @tournament.can_add_players? %>
-    <!-- <%= link_to "Add Player", new_player_path(:tournament => @tournament), :class => "btn" %> -->
-    
-     <button class="btn" id="add_player">Add Player</button>
-
+    <button class="btn" id="add_player">Add Player</button>
     <%= link_to "Start Tournament", tournament_start_path(@tournament), :class => "btn" %>
   <% elsif @tournament.all_matches_finished? %>
     <h4><%= @tournament.current_round %> / <%= @tournament.total_number_of_rounds %> Rounds</h4>
